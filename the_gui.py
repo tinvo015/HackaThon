@@ -24,6 +24,7 @@ def openPic():
 	image = app.openBox(title='select image', fileTypes=fileTypes, parent='identify new person')
 	if image:
 		copyfile(image, newPersonImage)
+		print('newPersonImage is '+str(image))
 		app.reloadImage('new image', newPersonImage)
 		app.zoomImage('new image', -10)
 	
@@ -49,6 +50,7 @@ def doneAddData():
 # Clears all the fields and loads new data
 def reloadAll():
 	app.hideSubWindow('identify new person', useStopFunction=False)
+	
 	
 def setupGui():
 	copyfile(blankImage, mainPersonImage)
