@@ -1,6 +1,7 @@
 
 from appJar import gui
 from shutil import copyfile
+from trainfaces import recognize_faces 
 
 app = gui('ID_entifer', '600x500')
 
@@ -23,10 +24,14 @@ def openPic():
 	fileTypes = [('images', '*.jpeg'), ('images', '*.png'), ('images', '*.gif')]
 	image = app.openBox(title='select image', fileTypes=fileTypes, parent='identify new person')
 	if image:
-		copyfile(image, newPersonImage)
-		print('newPersonImage is '+str(image))
+		i, conf = recognize_faces(image)
+		conf *= 100
+		app.setMeter("photo confidence", conf)
+		app.setMeter("total confidence", conf)
+		copyfile(image[:-4] + 'gif', newPersonImage)
 		app.reloadImage('new image', newPersonImage)
 		app.zoomImage('new image', -10)
+		reloadMainPic(image[:-4] + 'gif')
 	
 def openPrintfile():
 	fileTypes = [('images', '*.jpg')] # What filetypes for fingerpring???
@@ -35,9 +40,10 @@ def openPrintfile():
 		copyfile(image, fingerPrintFile)
 
 def reloadMainPic(fileName):
-	copyfile(image, mainPersonImage)
+	copyfile(fileName, mainPersonImage)
 	app.reloadImage('identifying image', mainPersonImage)
 	app.zoomImage('identifying image', -10)
+	app.setImageSize('identifying image', 200, 300)
 
 def addPoint():
 	# show popup
@@ -50,7 +56,6 @@ def doneAddData():
 # Clears all the fields and loads new data
 def reloadAll():
 	app.hideSubWindow('identify new person', useStopFunction=False)
-	
 	
 def setupGui():
 	copyfile(blankImage, mainPersonImage)
@@ -67,16 +72,16 @@ def setupGui():
 	
 	app.startLabelFrame("Photo match confidence",3,0)
 	app.setSticky('ew')
-	app.addMeter('photo confidance')
-	app.setMeterFill('photo confidance', "blue")
-	app.setMeter('photo confidance', 0)
+	app.addMeter('photo confidence')
+	app.setMeterFill('photo confidence', "blue")
+	app.setMeter('photo confidence', 0)
 	app.stopLabelFrame()
 	
 	app.startLabelFrame("Fingerprint match confidence",4,0)
 	app.setSticky('ew')
-	app.addMeter('Fingerprint confidance')
-	app.setMeterFill('Fingerprint confidance', "blue")
-	app.setMeter('Fingerprint confidance', 0)
+	app.addMeter('Fingerprint confidence')
+	app.setMeterFill('Fingerprint confidence', "blue")
+	app.setMeter('Fingerprint confidence', 0)
 	app.stopLabelFrame()
 	
 	app.startLabelFrame('Identification Code', 1,1)
@@ -91,11 +96,11 @@ def setupGui():
 	app.setMessageWidth('other data message', 200)
 	app.stopLabelFrame()
 	
-	app.startLabelFrame('Total Confidance in identification',5,0,2)
+	app.startLabelFrame('Total Confidence in identification',5,0,2)
 	app.setSticky('ew')
-	app.addMeter('total confidance')
-	app.setMeterFill('total confidance', "red")
-	app.setMeter('total confidance', 0)
+	app.addMeter('total confidence')
+	app.setMeterFill('total confidence', "red")
+	app.setMeter('total confidence', 0)
 	app.stopLabelFrame()
 	
 	app.addButton('Add data to person',addPoint,4,1)
