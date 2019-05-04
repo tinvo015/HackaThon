@@ -15,7 +15,6 @@ def newPerson():
 	copyfile(blankImage, newPersonImage)
 	app.reloadImage('new image', newPersonImage)
 	app.showSubWindow('identify new person')
-	pass
 
 def exitButton():
 	app.stop()
@@ -39,6 +38,14 @@ def reloadMainPic(fileName):
 	app.reloadImage('identifying image', mainPersonImage)
 	app.zoomImage('identifying image', -10)
 
+def addPoint():
+	# show popup
+	app.showSubWindow('add data to person')
+
+def doneAddData():
+	app.hideSubWindow('add data to person')
+	# Save the data
+	
 # Clears all the fields and loads new data
 def reloadAll():
 	app.hideSubWindow('identify new person', useStopFunction=False)
@@ -76,7 +83,7 @@ def setupGui():
 	app.stopLabelFrame()
 	
 	app.setSticky('new')
-	app.startLabelFrame('Other data',2,1,0,3)
+	app.startLabelFrame('Other data',2,1,0,2)
 	app.setSticky('nsew')
 	app.addMessage('other data message', 'NO ADDITIONAL DATA')
 	app.setMessageWidth('other data message', 200)
@@ -88,9 +95,11 @@ def setupGui():
 	app.setMeterFill('total confidance', "red")
 	app.setMeter('total confidance', 0)
 	app.stopLabelFrame()
+	
+	app.addButton('Add data to person',addPoint,4,1)
 
 def setupSubwindows():
-	# Sub-windows...
+	# New person window
 	app.startSubWindow("identify new person")
 	copyfile(blankImage, newPersonImage)
 	app.addButton('Add Picture', openPic)
@@ -100,7 +109,17 @@ def setupSubwindows():
 	app.stopLabelFrame()
 	app.addButton('Add Fingerprint file', openPrintfile)
 	app.addButton('Done', reloadAll)
+	app.stopSubWindow()
 	
+	# Add data window
+	app.startSubWindow('add data to person')
+	app.startLabelFrame('Key:')
+	app.addEntry('key field')
+	app.stopLabelFrame()
+	app.startLabelFrame('Value:')
+	app.addEntry('value field')
+	app.stopLabelFrame()
+	app.addButton('Add data', doneAddData)
 	app.stopSubWindow()
 	
 def main():
