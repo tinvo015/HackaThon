@@ -10,7 +10,6 @@ class user:
 		return self.medical
 
 	def remove_medical_info(keyword):
-		i = 5
 		del self.medical[keyword]
 		return self.medical
 
