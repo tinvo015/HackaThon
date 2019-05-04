@@ -12,6 +12,8 @@ fingerPrintFile = 'blank.gif'
 # When 'new person' button is pressed.
 # reset and open popup
 def newPerson():
+	copyfile(blankImage, newPersonImage)
+	app.reloadImage('new image', newPersonImage)
 	app.showSubWindow('identify new person')
 	pass
 
@@ -36,7 +38,11 @@ def reloadMainPic(fileName):
 	copyfile(image, mainPersonImage)
 	app.reloadImage('identifying image', mainPersonImage)
 	app.zoomImage('identifying image', -10)
-		
+
+# Clears all the fields and loads new data
+def reloadAll():
+	app.hideSubWindow('identify new person', useStopFunction=False)
+	
 def setupGui():
 	copyfile(blankImage, mainPersonImage)
 	
@@ -93,6 +99,7 @@ def setupSubwindows():
 	app.setImageSize('new image', 200, 300)
 	app.stopLabelFrame()
 	app.addButton('Add Fingerprint file', openPrintfile)
+	app.addButton('Done', reloadAll)
 	
 	app.stopSubWindow()
 	
