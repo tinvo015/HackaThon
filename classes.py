@@ -1,9 +1,9 @@
-class user:
-	def __init__(self, name, photo, voice):
+class User:
+	def __init__(self, id_num, photo, voice):
 		self.photo = photo
 		self.voice = voice
-		self.name = name
 		self.medical = {}
+		self.id_num = id_num
 
 	def add_medical_info(keyword, values):
 		self.medical[keyword] = values
