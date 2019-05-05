@@ -2,6 +2,7 @@
 from appJar import gui
 from shutil import copyfile
 from trainfaces import recognize_faces 
+from methods_and_main import return_gui
 
 app = gui('ID_entifer', '600x500')
 
@@ -24,7 +25,7 @@ def openPic():
 	fileTypes = [('images', '*.jpeg'), ('images', '*.png'), ('images', '*.gif')]
 	image = app.openBox(title='select image', fileTypes=fileTypes, parent='identify new person')
 	if image:
-		i, conf = recognize_faces(image)
+		i, conf, alternative_path, info = return_gui(image)
 		conf *= 100
 		app.setMeter("photo confidence", conf)
 		app.setMeter("total confidence", conf)
@@ -32,6 +33,9 @@ def openPic():
 		app.reloadImage('new image', newPersonImage)
 		app.zoomImage('new image', -10)
 		reloadMainPic(image[:-4] + 'gif')
+		app.setLabel('id_code', info['name'])
+		info_string = 'Medical History: ' + str(info['medical_history']).replace("'", '')[1:-1] + '\n\n' + 'Other Comments: ' + str(info['comments']).replace("'", '')[1:-1]
+		app.setMessage('other data message', info_string)
 	
 def openPrintfile():
 	fileTypes = [('images', '*.jpg')] # What filetypes for fingerpring???
@@ -84,7 +88,7 @@ def setupGui():
 	app.setMeter('Fingerprint confidence', 0)
 	app.stopLabelFrame()
 	
-	app.startLabelFrame('Identification Code', 1,1)
+	app.startLabelFrame('Name', 1,1)
 	app.setSticky('')
 	app.addLabel('id_code','DEADBEEF1234')
 	app.stopLabelFrame()

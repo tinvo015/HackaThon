@@ -43,18 +43,17 @@ def write_json(user_set):
   		json.dump(user_set, json_file)
 	return 0
 
-def get_user_info():
+def get_user_info(user_id, confidence_level):
 	user_set = load_json()
-	user_id, confidence_level = recognize_faces(image_path)
 	for keys, values in user_set.items():
+		print(user_id)
 		if keys == str(user_id):
 			return values
-		else:
-			return -1
+	return -1
 
 def return_gui(image_path):
 	user_id, confidence_level = recognize_faces(image_path)
-	info = get_user_info()
+	info = get_user_info(user_id, confidence_level)
 	# for keys, values in info.items():
 		# for item in values:
 			# print(values)
