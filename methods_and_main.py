@@ -15,13 +15,31 @@ def find_user(image_path):
 	return results, confidence_level
 
 # creates new user profile, updates this in json file, and returns newly created profile
-def submit_new(user_id, image_path):
+def submit_new(user_id, confidence_level, input_key, input_value):
 	user_set = load_json()
 	results = User(user_id, image_path)
-	user_set[len(user_set)] = { 'name': 'Pringles', "comments": ["good", "no problems"], "medical_history": [] }
+	# user_set[user_id] = { 'name': 'Pringles', "comments": ["good", "no problems"], "medical_history": [] }
+	# dictionary = user_set[user_id]
+	#print(user_set)
+	dictionary = {}
+	for keys, values in user_set.items():
+		if keys == str(user_id):
+			dictionary = values
+
+	temp = []
+	temp.append(input_value)
+	dictionary[input_key] = temp
+
+	'''
+	for keys, values in dictionary.items():
+		if keys == str(input_key):
+			temp = []
+			temp.append(input_value)
+			dictionary[keys] = temp
+	'''
+	user_set[str(user_id)] = dictionary
 	write_json(user_set)
 	return results
-
 
 # ets specific user object from the json file
 def submit_check(user_id, image_path):
