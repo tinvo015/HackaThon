@@ -26,9 +26,7 @@ def submit_new(user_id, confidence_level, input_key, input_value):
 		if keys == str(user_id):
 			dictionary = values
 
-	temp = []
-	temp.append(input_value)
-	dictionary[input_key] = temp
+	dictionary[input_key].append(input_value)
 
 	'''
 	for keys, values in dictionary.items():
@@ -39,7 +37,7 @@ def submit_new(user_id, confidence_level, input_key, input_value):
 	'''
 	user_set[str(user_id)] = dictionary
 	write_json(user_set)
-	return results
+	return dictionary
 
 # ets specific user object from the json file
 def submit_check(user_id, image_path):
@@ -57,7 +55,7 @@ def load_json():
 	return data
 
 def write_json(user_set):
-	with open('user_set.txt', 'w') as json_file:
+	with open('test.json', 'w') as json_file:
   		json.dump(user_set, json_file)
 	return 0
 

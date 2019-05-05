@@ -2,7 +2,7 @@
 from appJar import gui
 from shutil import copyfile
 from trainfaces import recognize_faces 
-from methods_and_main import return_gui
+from methods_and_main import return_gui, submit_new
 
 app = gui('ID_entifer', '600x500')
 
@@ -10,6 +10,7 @@ blankImage = 'blank.gif'
 mainPersonImage = 'mainImage.gif'
 newPersonImage = 'newPersonImage.gif'
 fingerPrintFile = 'blank.gif'
+currentId = ''
 
 # When 'new person' button is pressed.
 # reset and open popup
@@ -22,11 +23,14 @@ def exitButton():
 	app.stop()
 
 def openPic():
+	global currentId
 	fileTypes = [('images', '*.jpeg'), ('images', '*.png'), ('images', '*.gif')]
 	image = app.openBox(title='select image', fileTypes=fileTypes, parent='identify new person')
 	if image:
 		i, conf, alternative_path, info = return_gui(image)
 		conf *= 100
+		currentId = i
+
 		app.setMeter("photo confidence", conf)
 		app.setMeter("total confidence", conf)
 		copyfile(image[:-4] + 'gif', newPersonImage)
@@ -55,7 +59,14 @@ def addPoint():
 
 def doneAddData():
 	app.hideSubWindow('add data to person')
-	# Save the data
+	key = app.getEntry('key field')
+	value = app.getEntry('value field')
+	info = submit_new(currentId, '', key, value)
+	print(info)
+	app.setLabel('id_code', info['name'])
+	info_string = 'Medical History: ' + str(info['medical_history']).replace("'", '')[1:-1] + '\n\n' + 'Other Comments: ' + str(info['comments']).replace("'", '')[1:-1]
+	app.setMessage('other data message', info_string)
+
 	
 # Clears all the fields and loads new data
 def reloadAll():
